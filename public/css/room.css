@@ -1,0 +1,241 @@
+:root {
+  --primary-color: #3f51b5; /* Koyu lacivert */
+  --secondary-color: #f50057; /* Kırmızımsı pembe */
+  --bg-dark: #121212; /* Siyahımsı koyu ton */
+  --bg-card: #1e1e1e; /* Kart ve paneller için biraz daha açık ton */
+  --text-light: #e0e0e0; /* Açık gri yazı */
+  --border-color: #333;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  overflow: hidden;
+  height: 100vh;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Video Grid */
+.video-grid {
+  flex-grow: 1;
+  display: grid;
+  gap: 15px;
+  padding: 15px;
+  overflow-y: auto;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@media (min-width: 1200px) {
+  .video-grid {
+    grid-template-columns: repeat(
+      3,
+      minmax(300px, 1fr)
+    ); /* Masaüstünde max 3 sütun */
+    justify-content: center;
+    align-content: center;
+    overflow: hidden; /* Masaüstünde kaydırma olmasın */
+  }
+}
+
+.video-wrapper {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.video-wrapper:hover {
+  transform: scale(1.02);
+}
+
+.video-wrapper.local {
+  border: 3px solid var(--primary-color);
+}
+
+.video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-wrapper.local video {
+  transform: scaleX(-1);
+}
+
+.video-label {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.video-overlay-icons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.video-overlay-icons i {
+  color: var(--text-light);
+  font-size: 1.2rem;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 6px;
+  border-radius: 50%;
+}
+
+.video-wrapper.muted .muted-icon,
+.video-wrapper.video-off .video-off-icon {
+  display: block;
+}
+
+.muted-icon,
+.video-off-icon {
+  display: none;
+}
+
+/* Footer ve Kontroller */
+.meeting-footer {
+  width: 100%;
+  background: var(--bg-card);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+  z-index: 100;
+}
+
+.room-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+}
+
+.controls-center {
+  display: flex;
+  gap: 15px;
+}
+
+.control-btn {
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  background: #2b2b2b;
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.control-btn:hover {
+  background: #3a3a3a;
+  transform: scale(1.05);
+}
+
+.control-btn.muted,
+.control-btn.video-off {
+  background: var(--secondary-color);
+}
+
+.control-btn.leave {
+  background: #d32f2f;
+  color: white;
+}
+
+.control-btn.leave:hover {
+  background: #c62828;
+}
+
+/* Katılımcı Sidebar'ı */
+.participants-sidebar {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 280px;
+  height: 100vh;
+  background: var(--bg-card);
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  transition: right 0.4s ease-in-out;
+  z-index: 99;
+}
+
+.participants-sidebar.active {
+  right: 0;
+}
+
+.participants-sidebar h3 {
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+#participantList {
+  list-style: none;
+  font-size: 14px;
+}
+
+.participant-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #444;
+}
+
+.participant-item:last-child {
+  border-bottom: none;
+}
+
+/* Responsive Tasarım */
+@media (max-width: 768px) {
+  .meeting-footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .room-info {
+    order: 2;
+    font-size: 14px;
+  }
+
+  .controls-center {
+    order: 1;
+  }
+
+  .participants-toggle-container {
+    display: block;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .participants-sidebar {
+    width: 250px;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+    overflow-y: scroll;
+  }
+}

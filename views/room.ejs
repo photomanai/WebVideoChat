@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Sohbet Odası: <%= roomId %></title>
+    <link rel="stylesheet" href="/css/room.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="video-grid" id="videosContainer">
+        <div class="video-wrapper local">
+          <video id="localVideo" autoplay muted playsinline></video>
+          <div class="video-label">Sen</div>
+          <!-- <div class="video-overlay-icons">
+            <i class="fas fa-microphone-slash muted-icon"></i>
+            <i class="fas fa-video-slash video-off-icon"></i>
+          </div> -->
+        </div>
+      </div>
+
+      <div class="meeting-footer">
+        <div class="room-info">
+          <i class="fas fa-users"></i>
+          <span id="participantCount">1</span>
+        </div>
+
+        <div class="controls-center">
+          <button id="muteBtn" class="control-btn" title="Mikrofonu Kapat">
+            <i class="fas fa-microphone"></i>
+          </button>
+          <button id="videoBtn" class="control-btn" title="Kamerayı Kapat">
+            <i class="fas fa-video"></i>
+          </button>
+          <button id="leaveBtn" class="control-btn leave" title="Ayrıl">
+            <i class="fas fa-phone-slash"></i>
+          </button>
+        </div>
+
+        <div class="participants-toggle-container">
+          <button
+            id="toggleParticipantsBtn"
+            class="control-btn"
+            title="Katılımcılar"
+          >
+            <i class="fas fa-users"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="participants-sidebar" id="participantsSidebar">
+        <h3>Katılımcılar</h3>
+        <div id="participantList"></div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/room.js"></script>
+    <script>
+      // URL'den parametreleri al
+      const urlParams = new URLSearchParams(window.location.search);
+      const userName = urlParams.get("name") || "Misafir";
+      const roomId = "<%= roomId %>";
+
+      // Uygulamayı başlat
+      const app = new VideoMeetingApp(roomId, userName);
+    </script>
+    <script>
+      // Katılımcı listesi açma/kapama
+      const toggleBtn = document.getElementById("toggleParticipantsBtn");
+      const sidebar = document.getElementById("participantsSidebar");
+
+      toggleBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+        toggleBtn.classList.toggle("active");
+      });
+    </script>
+  </body>
+</html>
