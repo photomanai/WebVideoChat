@@ -28,7 +28,7 @@ app.get("/room/:roomId", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("Yeni kullanıcı bağlandı:", socket.id);
+  console.log("New user connected:", socket.id);
 
   let currentRoomId = null;
   let currentUserId = null;
@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
       socketId: socket.id,
     };
 
-    // Mevcut kullanıcıları yeni kullanıcıya gönder
+    // Send existing users to the new user
     const existingUsers = Object.values(rooms[roomId].users).filter(
       (user) => user.id !== userId
     );
@@ -58,19 +58,19 @@ io.on("connection", (socket) => {
       socket.emit("existing-users", existingUsers);
     }
 
-    // Diğer kullanıcılara yeni kullanıcıyı bildir
+    // Notify other users about the new user
     socket.to(roomId).emit("user-connected", userId, userName);
 
     console.log(
-      `${userName} (${userId}) ${roomId} odasına katıldı. Toplam: ${
+      `${userName} (${userId}) joined room ${roomId}. Total: ${
         Object.keys(rooms[roomId].users).length
       }`
     );
   });
 
-  // WebRTC sinyalleri - DÜZELTİLMİŞ
+  // WebRTC signals - FIXED
   socket.on("offer", (data) => {
-    console.log("Offer alındı:", data.from, "->", data.to);
+    console.log("Offer received:", data.from, "->", data.to);
     const targetSocket = findSocketByUserId(data.to);
     if (targetSocket) {
       targetSocket.emit("offer", {
@@ -79,12 +79,12 @@ io.on("connection", (socket) => {
         offer: data.offer,
       });
     } else {
-      console.log("Hedef kullanıcı bulunamadı:", data.to);
+      console.log("Target user not found:", data.to);
     }
   });
 
   socket.on("answer", (data) => {
-    console.log("Answer alındı:", data.from, "->", data.to);
+    console.log("Answer received:", data.from, "->", data.to);
     const targetSocket = findSocketByUserId(data.to);
     if (targetSocket) {
       targetSocket.emit("answer", {
@@ -117,7 +117,7 @@ io.on("connection", (socket) => {
         socket.to(currentRoomId).emit("user-disconnected", currentUserId);
       }
 
-      console.log(`Kullanıcı ayrıldı: ${currentUserId}`);
+      console.log(`User disconnected: ${currentUserId}`);
     }
   });
 });
@@ -134,6 +134,6 @@ function findSocketByUserId(userId) {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Server ${PORT} portunda çalışıyor`);
-  console.log(`WebRTC test için: http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`For WebRTC test: http://localhost:${PORT}`);
 });

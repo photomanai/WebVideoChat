@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Görüntülü Toplantı</title>
+    <title>Video Meeting</title>
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
     <div class="container">
       <div class="main-content">
-        <h1>Görüntülü Toplantı</h1>
+        <h1>Video Meeting</h1>
         <div class="join-section">
           <input
             type="text"
             id="userName"
-            placeholder="Adınızı girin"
+            placeholder="Enter your name"
             maxlength="20"
           />
           <input
             type="text"
             id="roomId"
-            placeholder="Oda ID'si girin veya oluşturun"
+            placeholder="Enter or create Room ID"
             maxlength="10"
           />
-          <button id="joinBtn">Odaya Katıl</button>
-          <button id="createBtn">Yeni Oda Oluştur</button>
+          <button id="joinBtn">Join Room</button>
+          <button id="createBtn">Create New Room</button>
         </div>
         <div class="info">
-          <p>• Oda ID'si paylaşarak arkadaşlarınızı davet edebilirsiniz</p>
-          <p>• Kamera ve mikrofon izni vermeniz gerekecek</p>
-          <p>• En az 2 kişi olduğunda görüntülü görüşme başlar</p>
+          <p>• Share the Room ID to invite your friends</p>
+          <p>• You will need to allow camera and microphone access</p>
+          <p>• Video call starts when at least 2 people join</p>
         </div>
       </div>
     </div>
@@ -40,24 +40,24 @@
       const joinBtn = document.getElementById("joinBtn");
       const createBtn = document.getElementById("createBtn");
 
-      // Yeni oda oluştur
+      // Create a new room
       createBtn.addEventListener("click", () => {
         const roomId = generateRoomId();
         roomIdInput.value = roomId;
       });
 
-      // Odaya katıl
+      // Join room
       joinBtn.addEventListener("click", () => {
         const userName = userNameInput.value.trim();
         const roomId = roomIdInput.value.trim();
 
         if (!userName) {
-          alert("Lütfen adınızı girin");
+          alert("Please enter your name");
           return;
         }
 
         if (!roomId) {
-          alert("Lütfen oda ID'si girin");
+          alert("Please enter a Room ID");
           return;
         }
 
@@ -66,7 +66,7 @@
         )}`;
       });
 
-      // Enter tuşu ile katılma
+      // Join using Enter key
       [userNameInput, roomIdInput].forEach((input) => {
         input.addEventListener("keypress", (e) => {
           if (e.key === "Enter") {
@@ -75,7 +75,7 @@
         });
       });
 
-      // Random oda ID oluştur
+      // Generate random room ID
       function generateRoomId() {
         return Math.random().toString(36).substring(2, 8).toUpperCase();
       }
